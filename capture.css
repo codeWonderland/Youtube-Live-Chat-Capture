@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300');
+
+div.feed-box
+{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #484848;
+    padding: 1rem;
+    color: #fff;
+    margin-top: 1rem;
+}
+
+div#chat-client-content
+{
+    width: 50%;
+    position: relative;
+    margin: auto;
+}
+
+body
+{
+    background-color: rgb(230,230,230);
+    font-family: 'Lato', sans-serif;
+    font-size: larger;
+}

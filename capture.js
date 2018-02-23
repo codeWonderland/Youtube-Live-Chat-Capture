@@ -1,14 +1,16 @@
 var chat_dict = {};
 var ticker;
 
-function handleClientLoad() {
+function handleClientLoad()
+{
     // Loads the client library and the auth2 library together for efficiency.
     // Loading the auth2 library is optional here since `gapi.client.init` function will load
     // it if not already loaded. Loading it upfront can save one network request.
     gapi.load('client:auth2', initClient);
 }
 
-function initClient() {
+function initClient()
+{
     // Initialize the client with API key and People API, and initialize OAuth with an
     // OAuth 2.0 client ID and scopes (space delimited string) to request access.
     gapi.client.init({
@@ -85,6 +87,7 @@ function getChatIdViaBroadcastId(id)
             }
     }).then(function(response){
         broadcast = JSON.parse(response.body).items[0];
+        console.log(broadcast)
         if (broadcast.snippet.liveChatId)
         {
             chatId = broadcast.snippet.liveChatId;
@@ -126,17 +129,26 @@ function chatTicker(id)
 
 function displayChatDict()
 {
-    var tmp = '<button onclick="emailData()">Email Data</button>';
+    var tmp = '<button onclick="emailData()">Email Data</button>' +
+        '<button onclick="stopFeed()">Stop Feed</button>' +
+        '<h1>Live Feed:</h1>' +
+        '<div class="feed-box">';
 
     jQuery.each(chat_dict, function(){
         tmp += '<p>' + this.message + '</p>';
     });
 
+    tmp += '</div>';
+
     document.getElementById('chat-client-content').innerHTML = tmp;
+}
+
+function stopFeed()
+{
+    clearInterval(ticker);
 }
 
 function emailData()
 {
-    clearInterval(ticker);
     console.log(chat_dict);
 }
