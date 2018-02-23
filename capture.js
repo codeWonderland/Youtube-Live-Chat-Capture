@@ -31,8 +31,7 @@ function updateSigninStatus(isSignedIn)
     // If the signin status is changed to signedIn, we make an API call.
     if (isSignedIn)
     {
-        document.getElementById('chat-client-content').innerHTML = '<button onclick="getAllLiveBroadcasts()">Select Live Broadcast from list</button>' +
-            '<button onclick="inputBroadcastId()">Get Chat via Broadcast Id</button>'
+        getLiveBroadcasts();
     }
     else
     {
@@ -41,8 +40,6 @@ function updateSigninStatus(isSignedIn)
 }
 
 function handleSignInClick(event) {
-    // Ideally the button should only show up after gapi.client.init finishes, so that this
-    // handler won't be called before OAuth is initialized.
     gapi.auth2.getAuthInstance().signIn();
 }
 
@@ -50,9 +47,9 @@ function handleSignOutClick(event) {
     gapi.auth2.getAuthInstance().signOut();
 }
 
-function getAllLiveBroadcasts()
+function getLiveBroadcasts()
 {
-    var broadcasts, tmp = '<select id="broadcast-select">';
+    var broadcasts, tmp = '<h1>Select from current live broadcasts</h1><select id="broadcast-select">';
     // Make an API call to the People API, and print the user's given name.
     gapi.client.request({
         "path" : "https://www.googleapis.com/youtube/v3/liveBroadcasts",
@@ -84,38 +81,26 @@ function getChatIdViaBroadcastId(id)
         "params" :
             {
                 "part" : "snippet",
-                "mine" : true
+                "id" : id
             }
     }).then(function(response){
-        broadcasts = JSON.parse(response.body).items;
-        broadcasts.forEach
-        (
-            function(broadcast)
-            {
-                if (broadcast.id === id)
-                {
-                    if (broadcast.snippet.liveChatId)
-                    {
-                        chatId = broadcast.snippet.liveChatId;
-                    }
-                    else
-                    {
-                        console.log('Video is not live, make sure video is live then try again');
-                    }
-                }
-            }
-        )
-
-        if (chatId != '')
+        broadcast = JSON.parse(response.body).items[0];
+        console.log(broadcast)
+        if (broadcast.snippet.liveChatId)
         {
+            chatId = broadcast.snippet.liveChatId;
             getChatFromId(chatId);
+        }
+        else
+        {
+            alert('Video is not live, make sure video is live then try again');
         }
     })
 }
 
 function getChatFromId(id)
 {
-    ticker = setInterval(() => chatTicker(id), 500)
+    ticker = setInterval(() => chatTicker(id), 500);
 }
 
 function chatTicker(id)
