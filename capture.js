@@ -85,7 +85,6 @@ function getChatIdViaBroadcastId(id)
             }
     }).then(function(response){
         broadcast = JSON.parse(response.body).items[0];
-        console.log(broadcast)
         if (broadcast.snippet.liveChatId)
         {
             chatId = broadcast.snippet.liveChatId;
@@ -100,7 +99,7 @@ function getChatIdViaBroadcastId(id)
 
 function getChatFromId(id)
 {
-    ticker = setInterval(() => chatTicker(id), 500);
+    ticker = setInterval(function(){chatTicker(id)}, 500);
 }
 
 function chatTicker(id)
@@ -127,7 +126,7 @@ function chatTicker(id)
 
 function displayChatDict()
 {
-    var tmp = '<button onclick="emailData()">Email Data</button>'
+    var tmp = '<button onclick="emailData()">Email Data</button>';
 
     jQuery.each(chat_dict, function(){
         tmp += '<p>' + this.message + '</p>';
