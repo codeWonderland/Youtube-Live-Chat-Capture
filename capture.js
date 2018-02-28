@@ -107,25 +107,33 @@ function getChatFromId(id)
 
 function chatTicker(id)
 {
-    gapi.client.request({
-        "path" : "https://www.googleapis.com/youtube/v3/liveChat/messages",
-        "params" :
-            {
-                "part" : "snippet",
-                "liveChatId" : id
-            }
-    }).then(function(response) {
-        messages = JSON.parse(response.body).items;
-        messages.forEach(function(message){
-            chat_dict[message.id] = {
-                "message" : message.snippet.displayMessage,
-                "timestamp" : message.snippet.publishedAt,
-                "authorId" : message.snippet.authorChannelId
-            }
-        });
+    try
+    {
+        gapi.client.request({
+            "path" : "https://www.googleapis.com/youtube/v3/liveChat/messages",
+            "params" :
+                {
+                    "part" : "snippet",
+                    "liveChatId" : id
+                }
+        }).then(function(response) {
+            messages = JSON.parse(response.body).items;
+            messages.forEach(function(message){
+                chat_dict[message.id] = {
+                    "message" : message.snippet.displayMessage,
+                    "timestamp" : message.snippet.publishedAt,
+                    "authorId" : message.snippet.authorChannelId
+                }
+            });
 
-        displayChatDict();
-    })
+            displayChatDict();
+        })
+    }
+    catch (e) // If the api request fails we know that the stream is no longer live, so there is nothing to pull
+    {
+        stopFeed();
+        alert('Video is no longer live, no chat to pull');
+    }
 }
 
 function displayChatDict()
@@ -149,14 +157,48 @@ function stopFeed()
     clearInterval(ticker);
 }
 
-function downloadData()
-{
-    data_arr = [];
-    for (var key in chat_dict)
-    {
+function downloadData() {
+    var data_arr = [];
+    var current_message;
+
+    // First we convert the data into something we can use
+    for (var key in chat_dict) {
         data_arr.push(chat_dict[key]);
     }
-    JSONToCSVConvertor(data_arr, 'Chat Data', true);
+
+    Promise.all(
+        data_arr.map(getAuthorFromMessage)
+    ).then(function() {
+        JSONToCSVConvertor(data_arr, 'Chat Data', true)
+    });
+}
+
+function getAuthorFromMessage(message)
+{
+    try
+    {
+        return new Promise(function(resolve, reject){
+            var id = message['authorId'];
+
+            gapi.client.request({
+                "path" : "https://www.googleapis.com/youtube/v3/channels?part=snippet",
+                "params" :
+                    {
+                        "part" : "snippet",
+                        "id" : id
+                    }
+            }).then(function(response) {
+                message['authorId'] = JSON.parse(response.body)['items'][0]['snippet']['title'];
+                resolve()
+            })
+        });
+    }
+    catch (e)
+    {
+        console.log('Error fetching name for id: ' + id);
+        console.log(e);
+        return new Promise(function(resolve, reject) {resolve()});
+    }
 }
 
 function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
