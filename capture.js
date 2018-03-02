@@ -14,9 +14,9 @@ function initClient()
     // Initialize the client with API key and People API, and initialize OAuth with an
     // OAuth 2.0 client ID and scopes (space delimited string) to request access.
     gapi.client.init({
-        apiKey: auth.apiKey,
+        apiKey: "AIzaSyC4LsKUVUovDSl2aL-msnTozIfucb30dPI",
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"],
-        clientId: auth.clientId,
+        clientId: "8147080815-qdbov8dn9kj310q0hdfiumg0goq76spt.apps.googleusercontent.com",
         scope: 'https://www.googleapis.com/auth/youtube.readonly'
     }).then(function () {
         // Listen for sign-in state changes.
@@ -248,9 +248,7 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     }
 
     //Generate a file name
-    var fileName = "MyReport_";
-    //this will remove the blank-spaces from the title and replace it with an underscore
-    fileName += ReportTitle.replace(/ /g,"_");
+    var fileName = ReportTitle.replace(/ /g,"_");
 
     //Initialize file format you want csv or xls
     var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
