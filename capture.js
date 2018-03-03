@@ -16,10 +16,11 @@ function initClient()
     gapi.client.init({
         apiKey: "AIzaSyC4LsKUVUovDSl2aL-msnTozIfucb30dPI",
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"],
-        clientId: "8147080815-qdbov8dn9kj310q0hdfiumg0goq76spt.apps.googleusercontent.com",
+        clientId: "8147080815-ngffdq8df5vj6gjolqk6e364rvc8f58h.apps.googleusercontent.com",
         scope: 'https://www.googleapis.com/auth/youtube.readonly'
     }).then(function () {
         // Listen for sign-in state changes.
+        console.log('client init successful');
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
         // Handle the initial sign-in state.
