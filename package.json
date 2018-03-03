@@ -1,0 +1,15 @@
+{
+  "name": "Youtube-Live-Chat-Capture",
+  "version": "1.1.0",
+  "description": "A desktop application to capture youtube live chat",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/codeWonderland/Youtube-Live-Chat-Capture",
+  "author": "Alice Easter",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "~1.8.2"
+  }
+}

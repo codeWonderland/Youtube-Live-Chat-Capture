@@ -3,3 +3,6 @@
 
 # Auth File
 .auth.js
+
+# NPM
+node_modules/

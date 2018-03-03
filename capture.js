@@ -1,5 +1,5 @@
-var chat_dict = {};
-var ticker;
+let chat_dict = {};
+let ticker;
 
 function handleClientLoad()
 {

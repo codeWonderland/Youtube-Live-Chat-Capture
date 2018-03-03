@@ -19,6 +19,11 @@ div#chat-client-content
     margin: auto;
 }
 
+div.loading
+{
+    
+}
+
 body
 {
     background-color: rgb(230,230,230);
