@@ -16,10 +16,10 @@
 <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
 <script src="capture.js"></script>
 <script type="text/javascript">
-    gapi.load('auth2', function() {
-        // Library loaded.
-        handleClientLoad();
-    });
+    // Loads the client library and the auth2 library together for efficiency.
+    // Loading the auth2 library is optional here since `gapi.client.init` function will load
+    // it if not already loaded. Loading it upfront can save one network request.
+    gapi.load('client:auth2', initClient);
 </script>
 </body>
 </html>
